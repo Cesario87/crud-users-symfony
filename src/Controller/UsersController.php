@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,26 +19,49 @@ class UsersController extends AbstractController
 
 
     /**
-     * @Route("/users/list", name="users_list")
+     * @Route("/users", name="users_get")
      */
-    public function list(Request $request)
+    public function list(Request $request, UserRepository $userRepository)
     {
-        $name = $request->get('name', 'Anonymous');
+        $users = $userRepository->findAll();
+        $usersAsArray = [];
+        foreach ($users as $user) {
+            $usersAsArray[] = [
+                'id' => $user->getId(),
+                'nombre' => $user->getNombre()
+            ];
+        };
+        $response = new JsonResponse();
+        $response->setData([
+            'success' => true,
+            'data' => $usersAsArray
+                ]);
+        return $response;
+    }
+
+    /**
+     * @Route("/user/create", name="create_user")
+     */
+    public function createUser(Request $request, EntityManagerInterface $em) 
+    {
+        $user = new User();
+        $user->setNombre('Enrique');
+        $user->setApellidos('Pastor');
+        $user->setPoblación('Madrid');
+        $user->setCategoría('User');
+        $user->setEdad('55');
+        $user->setActivo('No');
+        $createdAt = new \DateTimeImmutable();
+        $user->setCreatedAt($createdAt);
+        $em->persist($user);
+        $em->flush();
         $response = new JsonResponse();
         $response->setData([
             'success' => true,
             'data' => [
                 [
-                    'id' => 1,
-                    'name' => 'Rosario Parrales'
-                ],
-                [
-                    'id' => 2,
-                    'name' => 'Antonio Recio'
-                ],
-                [
-                    'id' => 3,
-                    'name' => $name
+                    'id' => $user->getId(),
+                    'name' => $user->getNombre(),
                 ]
             ]
                 ]);
