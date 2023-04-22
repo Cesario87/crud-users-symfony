@@ -106,6 +106,7 @@ class UsersController extends AbstractFOSRestController
             $user->setNombre($userDto->nombre);
             $em->persist($user);
             $em->flush();
+            $em->refresh($user);
             return $user;
         }  
         return $form;        

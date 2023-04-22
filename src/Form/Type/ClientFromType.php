@@ -12,7 +12,9 @@ class ClientFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('nombre', TextType::class);
+        $builder
+            ->add('id', TextType::class)
+            ->add('nombre', TextType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)
