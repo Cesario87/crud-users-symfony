@@ -13,26 +13,26 @@ class User
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $poblacion = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $categoria = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $edad = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $activo = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $createdAt = null;
+
     #[ORM\Column(length: 255)]
     private ?string $nombre = null;
 
     #[ORM\Column(length: 255)]
     private ?string $apellidos = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $población = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $categoría = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $edad = null;
-
-    #[ORM\Column]
-    private ?bool $activo = null;
-
-    #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
 
     public function getId(): ?int
     {
@@ -63,26 +63,26 @@ class User
         return $this;
     }
 
-    public function getPoblación(): ?string
+    public function getPoblacion(): ?string
     {
-        return $this->población;
+        return $this->poblacion;
     }
 
-    public function setPoblación(string $población): self
+    public function setPoblacion(?string $poblacion): self
     {
-        $this->población = $población;
+        $this->poblacion = $poblacion;
 
         return $this;
     }
 
-    public function getCategoría(): ?string
+    public function getCategoria(): ?string
     {
-        return $this->categoría;
+        return $this->categoria;
     }
 
-    public function setCategoría(string $categoría): self
+    public function setCategoria(?string $categoria): self
     {
-        $this->categoría = $categoría;
+        $this->categoria = $categoria;
 
         return $this;
     }
@@ -92,7 +92,7 @@ class User
         return $this->edad;
     }
 
-    public function setEdad(string $edad): self
+    public function setEdad(?string $edad): self
     {
         $this->edad = $edad;
 
@@ -104,7 +104,7 @@ class User
         return $this->activo;
     }
 
-    public function setActivo(bool $activo): self
+    public function setActivo(?bool $activo): self
     {
         $this->activo = $activo;
 
@@ -116,7 +116,7 @@ class User
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    public function setCreatedAt(?\DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
 

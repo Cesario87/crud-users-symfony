@@ -47,8 +47,8 @@ class UsersController extends AbstractController
         $user = new User();
         $user->setNombre('Enrique');
         $user->setApellidos('Pastor');
-        $user->setPoblación('Madrid');
-        $user->setCategoría('User');
+        $user->setPoblacion('Madrid');
+        $user->setCategoria('User');
         $user->setEdad('55');
         $user->setActivo('No');
         $createdAt = new \DateTimeImmutable();
