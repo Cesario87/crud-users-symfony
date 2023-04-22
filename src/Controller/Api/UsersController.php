@@ -3,6 +3,7 @@
 namespace App\Controller\Api;
 
 use App\Entity\User;
+use App\Form\Model\UserDto;
 use App\Form\Type\UserFormType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -30,10 +31,13 @@ class UsersController extends AbstractFOSRestController
         EntityManagerInterface $em,
         Request $request
     ){
-        $user = new User();
-        $form = $this->createForm(UserFormType::class, $user);
+        $userDto = new UserDto();
+        $form = $this->createForm(UserFormType::class, $userDto);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()){
+            $user = new User();
+            $user->setNombre($userDto->nombre);
+            $user->setApellidos($userDto->apellidos);
             $em->persist($user);
             $em->flush();
             return $user;
