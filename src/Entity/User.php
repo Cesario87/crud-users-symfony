@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -33,6 +35,14 @@ class User
 
     #[ORM\Column(length: 255)]
     private ?string $apellidos = null;
+
+    #[ORM\ManyToMany(targetEntity: Client::class, inversedBy: 'users')]
+    private Collection $client;
+
+    public function __construct()
+    {
+        $this->client = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -119,6 +129,30 @@ class User
     public function setCreatedAt(?\DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Client>
+     */
+    public function getClient(): Collection
+    {
+        return $this->client;
+    }
+
+    public function addClient(Client $client): self
+    {
+        if (!$this->client->contains($client)) {
+            $this->client->add($client);
+        }
+
+        return $this;
+    }
+
+    public function removeClient(Client $client): self
+    {
+        $this->client->removeElement($client);
 
         return $this;
     }
