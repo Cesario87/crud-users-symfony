@@ -3,10 +3,12 @@
 namespace App\Controller\Api;
 
 use App\Entity\User;
+use App\Form\Type\UserFormType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use Symfony\Component\HttpFoundation\Request;
 
 class UsersController extends AbstractFOSRestController
 {
@@ -25,19 +27,17 @@ class UsersController extends AbstractFOSRestController
      * @Rest\View(serializerGroups={"user"}, serializerEnableMaxDepthChecks=true)
      */
     public function postAction(
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        Request $request
     ){
         $user = new User();
-        $user->setNombre('Amador');
-        $user->setApellidos('Rivas');
-        $user->setPoblación('Madrid');
-        $user->setCategoría('User');
-        $user->setEdad('38');
-        $user->setActivo('No');
-        $createdAt = new \DateTimeImmutable();
-        $user->setCreatedAt($createdAt);
-        $em->persist($user);
-        $em->flush();
-        return $user;
+        $form = $this->createForm(UserFormType::class, $user);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()){
+            $em->persist($user);
+            $em->flush();
+            return $user;
+        }
+        return $form;
     }
 }
