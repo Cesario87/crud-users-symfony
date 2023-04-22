@@ -30,12 +30,12 @@ class UsersController extends AbstractFOSRestController
         $user = new User();
         $user->setNombre('Amador');
         $user->setApellidos('Rivas');
-        // $user->setPoblación('Madrid');
-        // $user->setCategoría('User');
-        // $user->setEdad('55');
-        // $user->setActivo('No');
-        // $createdAt = new \DateTimeImmutable();
-        // $user->setCreatedAt($createdAt);
+        $user->setPoblación('Madrid');
+        $user->setCategoría('User');
+        $user->setEdad('38');
+        $user->setActivo('No');
+        $createdAt = new \DateTimeImmutable();
+        $user->setCreatedAt($createdAt);
         $em->persist($user);
         $em->flush();
         return $user;
