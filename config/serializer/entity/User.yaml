@@ -4,3 +4,5 @@ App\Entity\User:
       groups: ['user']
     nombre:
       groups: ['user']
+    apellidos:
+      groups: ['user']
