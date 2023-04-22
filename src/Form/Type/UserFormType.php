@@ -13,13 +13,13 @@ class UserFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('nombre', TextType::class);
-        $builder->add('apellidos', TextType::class);
-        $builder->add('poblacion', TextType::class);
-        $builder->add('client', CollectionType::class, [
-            'allow_add' => true,
-            'allow_delete' => true,
-            'entry_type' => ClientFormType::class
+        $builder
+            ->add('nombre', TextType::class)
+            ->add('apellidos', TextType::class)
+            ->add('client', CollectionType::class, [
+                'allow_add' => true,
+                'allow_delete' => true,
+                'entry_type' => ClientFormType::class
         ]);
     }
 
