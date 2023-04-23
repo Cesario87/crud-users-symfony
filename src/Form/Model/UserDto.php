@@ -4,15 +4,17 @@ namespace App\Form\Model;
 
 use App\Entity\User;
 
-class UserDto {
+class UserDto 
+{
     public $nombre;
     public $apellidos;
     public $poblacion;
-    public $client;
+    public $clientes;
 
     public function __construct()
     {
-        $this->client = [];
+        $this->clientes = [];
+
     }
 
     public static function createFromUser(User $user): self

@@ -18,7 +18,8 @@ class Client
     #[ORM\Column(length: 255)]
     private ?string $nombre = null;
 
-    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'client')]
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'clientes')]
+
     private Collection $users;
 
     public function __construct()
@@ -55,7 +56,9 @@ class Client
     {
         if (!$this->users->contains($user)) {
             $this->users->add($user);
-            $user->addClient($this);
+
+            $user->addCliente($this);
+
         }
 
         return $this;
@@ -64,7 +67,9 @@ class Client
     public function removeUser(User $user): self
     {
         if ($this->users->removeElement($user)) {
-            $user->removeClient($this);
+
+            $user->removeCliente($this);
+
         }
 
         return $this;

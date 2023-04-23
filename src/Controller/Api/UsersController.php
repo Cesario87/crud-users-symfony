@@ -42,7 +42,7 @@ class UsersController extends AbstractFOSRestController
         if (!$form->isSubmitted()) {
             return new Response('', Response::HTTP_BAD_REQUEST);
         }
-        if ($form->isSubmitted() && $form->isValid()){
+        if ($form->isValid()){
             $user = new User();
             $user->setNombre($userDto->nombre);
             $user->setApellidos($userDto->apellidos);
@@ -65,16 +65,18 @@ class UsersController extends AbstractFOSRestController
         Request $request
     ){
         $user = $userRepository->find($id);
-        if (!$user) {
-            throw $this->createNotFoundException('Usuario no encontrado');
+
+        if(!$user) {
+            throw $this->createNotFoundException("Usuario no encontrado");
         }
         $userDto = UserDto::createFromUser($user);
 
-        $originalClient = new ArrayCollection();
-        foreach ($user->getClient() as $client) {
+        $originalClientes = new ArrayCollection();
+        foreach ($user->getClientes() as $client){
             $clientDto = ClientDto::createFromClient($client);
-            $userDto->client[] = $clientDto;
-            $originalClient->add($clientDto);
+            $userDto->clientes[] = $clientDto;
+            $originalClientes->add($clientDto);
+
         }
 
         $form = $this->createForm(UserFormType::class, $userDto);
@@ -82,33 +84,38 @@ class UsersController extends AbstractFOSRestController
         if (!$form->isSubmitted()) {
             return new Response('', Response::HTTP_BAD_REQUEST);
         }
-        if (!$form->isValid()) {
-            // Remove clients
-            foreach ($originalClient as $originalClientDto) {
-                if (!in_array($originalClientDto, $userDto->client)){
+
+        if ($form->isValid()){
+            //quitar clientes
+            foreach ($originalClientes as $originalClientDto) {
+                if (!in_array($originalClientDto, $userDto->clientes)) {
                     $client = $clientRepository->find($originalClientDto->id);
-                    $user->removeClient($client);
+                    $user->removeCliente($client);
                 }
             }
 
-            // Add clients
-            foreach ($userDto->client as $newClientDto) {
-               if(!$originalClient->contains($newClientDto)){
+            //añadir clientes
+            foreach ($userDto->clientes as $newClientDto) {
+                if (!$originalClientes->contains($newClientDto)) {
                     $client = $clientRepository->find($newClientDto->id ?? 0);
-                    if(!$client){
+                    if (!$client) {
+
                         $client = new Client();
                         $client->setNombre($newClientDto->nombre);
                         $em->persist($client);
                     }
-                    $user->addClient($client);
-               }
+                    $user->addCliente($client);
+                }
+
             }
             $user->setNombre($userDto->nombre);
             $em->persist($user);
             $em->flush();
             $em->refresh($user);
             return $user;
-        }  
-        return $form;        
+
+        }
+        return $form;
+
     }
 }

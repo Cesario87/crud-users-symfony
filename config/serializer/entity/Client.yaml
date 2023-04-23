@@ -4,3 +4,4 @@ App\Entity\Client:
       groups: ['user']
     nombre:
       groups: ['user']
+

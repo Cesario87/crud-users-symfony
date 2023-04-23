@@ -37,11 +37,13 @@ class User
     private ?string $apellidos = null;
 
     #[ORM\ManyToMany(targetEntity: Client::class, inversedBy: 'users')]
-    private Collection $client;
+
+    private Collection $clientes;
 
     public function __construct()
     {
-        $this->client = new ArrayCollection();
+        $this->clientes = new ArrayCollection();
+
     }
 
     public function getId(): ?int
@@ -136,23 +138,26 @@ class User
     /**
      * @return Collection<int, Client>
      */
-    public function getClient(): Collection
+
+    public function getClientes(): Collection
     {
-        return $this->client;
+        return $this->clientes;
     }
 
-    public function addClient(Client $client): self
+    public function addCliente(Client $cliente): self
     {
-        if (!$this->client->contains($client)) {
-            $this->client->add($client);
+        if (!$this->clientes->contains($cliente)) {
+            $this->clientes->add($cliente);
+
         }
 
         return $this;
     }
 
-    public function removeClient(Client $client): self
+    public function removeCliente(Client $cliente): self
     {
-        $this->client->removeElement($client);
+        $this->clientes->removeElement($cliente);
+
 
         return $this;
     }

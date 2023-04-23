@@ -2,34 +2,25 @@
 
 namespace App\Form\Type;
 
-use App\Form\Model\UserDto;
+use App\Form\Model\ClientDto;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UserFormType extends AbstractType
+class ClientFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nombre', TextType::class)
-            ->add('apellidos', TextType::class)
-
-            ->add('poblacion', TextType::class)
-            ->add('clientes', CollectionType::class, [
-               'allow_add' => true,
-               'allow_delete' => true,
-               'entry_type' => ClientFormType::class
-            ]);
-
+            ->add('id', TextType::class)
+            ->add('nombre', TextType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => UserDto::class,
+            'data_class' => ClientDto::class,
         ]);
     }
 
