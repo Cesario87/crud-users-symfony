@@ -6,3 +6,5 @@ App\Entity\User:
       groups: ['user']
     apellidos:
       groups: ['user']
+    clientes:
+      groups: ['user']

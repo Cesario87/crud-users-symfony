@@ -1,0 +1,6 @@
+App\Entity\Client:
+  attributes:
+    id:
+      groups: ['user']
+    nombre:
+      groups: ['user']
