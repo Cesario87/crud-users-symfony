@@ -65,6 +65,7 @@ class UsersController extends AbstractFOSRestController
         Request $request
     ){
         $user = $userRepository->find($id);
+
         if(!$user) {
             throw $this->createNotFoundException("Usuario no encontrado");
         }
@@ -75,6 +76,7 @@ class UsersController extends AbstractFOSRestController
             $clientDto = ClientDto::createFromClient($client);
             $userDto->clientes[] = $clientDto;
             $originalClientes->add($clientDto);
+
         }
 
         $form = $this->createForm(UserFormType::class, $userDto);
@@ -82,6 +84,7 @@ class UsersController extends AbstractFOSRestController
         if (!$form->isSubmitted()) {
             return new Response('', Response::HTTP_BAD_REQUEST);
         }
+
         if ($form->isValid()){
             //quitar clientes
             foreach ($originalClientes as $originalClientDto) {
@@ -96,19 +99,23 @@ class UsersController extends AbstractFOSRestController
                 if (!$originalClientes->contains($newClientDto)) {
                     $client = $clientRepository->find($newClientDto->id ?? 0);
                     if (!$client) {
+
                         $client = new Client();
                         $client->setNombre($newClientDto->nombre);
                         $em->persist($client);
                     }
                     $user->addCliente($client);
                 }
+
             }
             $user->setNombre($userDto->nombre);
             $em->persist($user);
             $em->flush();
             $em->refresh($user);
             return $user;
+
         }
         return $form;
+
     }
 }
