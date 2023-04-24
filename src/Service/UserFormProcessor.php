@@ -69,6 +69,7 @@ class UserFormProcessor
                 }
             }
             $user->setNombre($userDto->nombre);
+            $user->setApellidos($userDto->apellidos);
             $this->userManager->save($user);
             $this->userManager->reload($user);
             return [$user, null];

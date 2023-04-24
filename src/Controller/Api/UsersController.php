@@ -2,17 +2,12 @@
 
 namespace App\Controller\Api;
 
-use App\Entity\Client;
-use App\Entity\User;
-use App\Form\Model\ClientDto;
-use App\Form\Model\UserDto;
-use App\Form\Type\UserFormType;
-use App\Repository\ClientRepository;
-use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\UserFormProcessor;
+use App\Service\UserManager;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use FOS\RestBundle\View\View;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -23,99 +18,75 @@ class UsersController extends AbstractFOSRestController
      * @Rest\View(serializerGroups={"user"}, serializerEnableMaxDepthChecks=true)
      */
     public function getAction(
-        UserRepository $userRepository
-    ){
-        return $userRepository->findAll();
+        UserManager $userManager
+    ) {
+        return $userManager->getRepository()->findAll();
     }
 
-        /**
+    /**
      * @Rest\Post(path="/users")
      * @Rest\View(serializerGroups={"user"}, serializerEnableMaxDepthChecks=true)
      */
     public function postAction(
-        EntityManagerInterface $em,
+        UserManager $userManager,
+        UserFormProcessor $userFormProcessor,
         Request $request
-    ){
-        $userDto = new UserDto();
-        $form = $this->createForm(UserFormType::class, $userDto);
-        $form->handleRequest($request);
-        if (!$form->isSubmitted()) {
-            return new Response('', Response::HTTP_BAD_REQUEST);
-        }
-        if ($form->isValid()){
-            $user = new User();
-            $user->setNombre($userDto->nombre);
-            $user->setApellidos($userDto->apellidos);
-            $em->persist($user);
-            $em->flush();
-            return $user;
-        }
-        return $form;
+    ) {
+        $user = $userManager->create();
+        [$user, $error] = ($userFormProcessor)($user, $request);
+        $statusCode = $user ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST;
+        $data = $user ?? $error;
+        return View::create($data, $statusCode);
     }
 
-        /**
-     * @Rest\Post(path="/users/{id}", requirements={"id"="\d+"})
+    /**
+     * @Rest\Get(path="/users/{id}")
+     * @Rest\View(serializerGroups={"user"}, serializerEnableMaxDepthChecks=true)
+     */
+    public function getSingleAction(
+        string $id,
+        UserManager $userManager
+    ) {
+        $user = $userManager->find(Uuid::fromString($id));
+        if (!$user) {
+            return View::create('User not found', Response::HTTP_BAD_REQUEST);
+        }
+        return $user;
+    }
+
+    /**
+     * @Rest\Post(path="/users/{id}")
      * @Rest\View(serializerGroups={"user"}, serializerEnableMaxDepthChecks=true)
      */
     public function editAction(
-        int $id,
-        EntityManagerInterface $em,
-        UserRepository $userRepository,
-        ClientRepository $clientRepository,
+        string $id,
+        UserFormProcessor $userFormProcessor,
+        UserManager $userManager,
         Request $request
-    ){
-        $user = $userRepository->find($id);
-
-        if(!$user) {
-            throw $this->createNotFoundException("Usuario no encontrado");
+    ) {
+        $user = $userManager->find(Uuid::fromString($id));
+        if (!$user) {
+            return View::create('User not found', Response::HTTP_BAD_REQUEST);
         }
-        $userDto = UserDto::createFromUser($user);
+        [$user, $error] = ($userFormProcessor)($user, $request);
+        $statusCode = $user ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST;
+        $data = $user ?? $error;
+        return View::create($data, $statusCode);
+    }
 
-        $originalClientes = new ArrayCollection();
-        foreach ($user->getClientes() as $client){
-            $clientDto = ClientDto::createFromClient($client);
-            $userDto->clientes[] = $clientDto;
-            $originalClientes->add($clientDto);
-
+    /**
+     * @Rest\Delete(path="/users/{id}")
+     * @Rest\View(serializerGroups={"user"}, serializerEnableMaxDepthChecks=true)
+     */
+    public function deleteAction(
+        string $id,
+        UserManager $userManager
+    ) {
+        $user = $userManager->find(Uuid::fromString($id));
+        if (!$user) {
+            return View::create('User not found', Response::HTTP_BAD_REQUEST);
         }
-
-        $form = $this->createForm(UserFormType::class, $userDto);
-        $form->handleRequest($request);
-        if (!$form->isSubmitted()) {
-            return new Response('', Response::HTTP_BAD_REQUEST);
-        }
-
-        if ($form->isValid()){
-            //quitar clientes
-            foreach ($originalClientes as $originalClientDto) {
-                if (!in_array($originalClientDto, $userDto->clientes)) {
-                    $client = $clientRepository->find($originalClientDto->id);
-                    $user->removeCliente($client);
-                }
-            }
-
-            //añadir clientes
-            foreach ($userDto->clientes as $newClientDto) {
-                if (!$originalClientes->contains($newClientDto)) {
-                    $client = $clientRepository->find($newClientDto->id ?? 0);
-                    if (!$client) {
-
-                        $client = new Client();
-                        $client->setNombre($newClientDto->nombre);
-                        $em->persist($client);
-                    }
-                    $user->addCliente($client);
-                }
-
-            }
-            $user->setNombre($userDto->nombre);
-            $em->persist($user);
-            $em->flush();
-            $em->refresh($user);
-            return $user;
-
-        }
-        return $form;
-
+        $userManager->delete($user);
+        return View::create(null, Response::HTTP_NO_CONTENT);
     }
 }
