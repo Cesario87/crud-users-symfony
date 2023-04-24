@@ -61,7 +61,7 @@ class UsersController extends AbstractController
             'data' => [
                 [
                     'id' => $user->getId(),
-                    'name' => $user->getNombre(),
+                    'nombre' => $user->getNombre(),
                 ]
             ]
                 ]);
