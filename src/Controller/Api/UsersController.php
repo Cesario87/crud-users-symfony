@@ -2,6 +2,7 @@
 
 namespace App\Controller\Api;
 
+use App\Model\User\UserRepositoryCriteria;
 use App\Service\UserFormProcessor;
 use App\Service\UserManager;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
@@ -17,9 +18,18 @@ class UsersController extends AbstractFOSRestController
      * @Rest\View(serializerGroups={"user"}, serializerEnableMaxDepthChecks=true)
      */
     public function getAction(
-        UserManager $userManager
+        UserManager $userManager,
+        Request $request
     ) {
-        return $userManager->getRepository()->findAll();
+        $clientId = $request->query->get('clientId');
+        $page = $request->query->get('page');
+        $itemsPerPage = $request->query->get('itemsPerPage');
+        $criteria = new UserRepositoryCriteria(
+            $clientId,
+            $itemsPerPage != null ? intval($itemsPerPage) : 10,
+            $page != null ? intval($page) : 1,
+        );
+        return $userManager->getRepository()->findByCriteria($criteria);
     }
 
     /**

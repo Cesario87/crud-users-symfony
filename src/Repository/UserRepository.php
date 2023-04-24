@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\User;
+use App\Model\User\UserRepositoryCriteria;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -39,28 +40,20 @@ class UserRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return User[] Returns an array of User objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('u')
-//            ->andWhere('u.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('u.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findByCriteria(UserRepositoryCriteria $criteria): array
+    {
+        $queryBuilder = $this->createQueryBuilder('u')
+            ->orderBy('u.id', 'ASC');
 
-//    public function findOneBySomeField($value): ?User
-//    {
-//        return $this->createQueryBuilder('u')
-//            ->andWhere('u.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        if ($criteria->clientId != null) {
+            $queryBuilder
+                ->andWhere(':clientId MEMBER OF u.clientes')
+                ->setParameter('clientId', $criteria->clientId);
+        }
+
+        $queryBuilder->setMaxResults($criteria->itemsPerPage);
+        $queryBuilder->setFirstResult(($criteria->page - 1) * $criteria->itemsPerPage);
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }
