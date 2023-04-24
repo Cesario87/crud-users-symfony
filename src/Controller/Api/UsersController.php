@@ -7,7 +7,6 @@ use App\Service\UserManager;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
-use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -44,10 +43,10 @@ class UsersController extends AbstractFOSRestController
      * @Rest\View(serializerGroups={"user"}, serializerEnableMaxDepthChecks=true)
      */
     public function getSingleAction(
-        string $id,
+        int $id,
         UserManager $userManager
     ) {
-        $user = $userManager->find(Uuid::fromString($id));
+        $user = $userManager->find($id);
         if (!$user) {
             return View::create('User not found', Response::HTTP_BAD_REQUEST);
         }
@@ -59,12 +58,12 @@ class UsersController extends AbstractFOSRestController
      * @Rest\View(serializerGroups={"user"}, serializerEnableMaxDepthChecks=true)
      */
     public function editAction(
-        string $id,
+        int $id,
         UserFormProcessor $userFormProcessor,
         UserManager $userManager,
         Request $request
     ) {
-        $user = $userManager->find(Uuid::fromString($id));
+        $user = $userManager->find($id);
         if (!$user) {
             return View::create('User not found', Response::HTTP_BAD_REQUEST);
         }
@@ -79,10 +78,10 @@ class UsersController extends AbstractFOSRestController
      * @Rest\View(serializerGroups={"user"}, serializerEnableMaxDepthChecks=true)
      */
     public function deleteAction(
-        string $id,
+        int $id,
         UserManager $userManager
     ) {
-        $user = $userManager->find(Uuid::fromString($id));
+        $user = $userManager->find($id);
         if (!$user) {
             return View::create('User not found', Response::HTTP_BAD_REQUEST);
         }

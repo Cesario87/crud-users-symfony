@@ -7,8 +7,7 @@ use App\Form\Model\UserDto;
 use App\Form\Model\ClientDto;
 use App\Form\Type\UserFormType;
 use Doctrine\Common\Collections\ArrayCollection;
-use Ramsey\Uuid\Uuid;
-use Symfony\Component\Form\Extension\Core\Type\UuidType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -48,7 +47,7 @@ class UserFormProcessor
             // Remove clientes
             foreach ($originalClientes as $originalClientDto) {
                 if (!\in_array($originalClientDto, $userDto->clientes)) {
-                    $client = $this->clientManager->find(Uuid::fromString($originalClientDto->id));
+                    $client = $this->clientManager->find($originalClientDto->id);
                     $user->removeCliente($client);
                 }
             }
@@ -58,7 +57,7 @@ class UserFormProcessor
                 if (!$originalClientes->contains($newClientDto)) {
                     $client = null;
                     if ($newClientDto->id !== null) {
-                        $client = $this->clientManager->find(Uuid::fromString($newClientDto->id));
+                        $client = $this->clientManager->find($newClientDto->id);
                     }
                     if (!$client) {
                         $client = $this->clientManager->create();

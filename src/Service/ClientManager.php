@@ -5,8 +5,6 @@ namespace App\Service;
 use App\Entity\Client;
 use App\Repository\ClientRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Ramsey\Uuid\Uuid;
-use Ramsey\Uuid\UuidInterface;
 
 class ClientManager
 {
@@ -20,7 +18,7 @@ class ClientManager
         $this->clientRepository = $clientRepository;
     }
 
-    public function find(UuidInterface $id): ?Client
+    public function find($id): ?Client
     {
         return $this->clientRepository->find($id);
     }
@@ -32,7 +30,7 @@ class ClientManager
 
     public function create(): Client
     {
-        $client = new Client(Uuid::uuid4());
+        $client = new Client();
         return $client;
     }
 

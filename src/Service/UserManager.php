@@ -5,8 +5,6 @@ namespace App\Service;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Ramsey\Uuid\Uuid;
-use Ramsey\Uuid\UuidInterface;
 
 class UserManager
 {
@@ -20,7 +18,7 @@ class UserManager
         $this->userRepository = $userRepository;
     }
 
-    public function find(UuidInterface $id): ?User
+    public function find(int $id): ?User
     {
         return $this->userRepository->find($id);
     }
@@ -32,7 +30,7 @@ class UserManager
 
     public function create(): User
     {
-        $user = new User(Uuid::uuid4());
+        $user = new User();
         return $user;
     }
 
