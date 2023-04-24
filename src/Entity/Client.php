@@ -17,6 +17,7 @@ class Client
 
     #[ORM\Column(length: 255)]
     private ?string $nombre = null;
+    private ?string $apellidos = null;
 
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'clientes')]
 
@@ -40,6 +41,18 @@ class Client
     public function setNombre(string $nombre): self
     {
         $this->nombre = $nombre;
+
+        return $this;
+    }
+
+    public function getApellidos(): ?string
+    {
+        return $this->apellidos;
+    }
+
+    public function setApellidos(string $apellidos): self
+    {
+        $this->apellidos = $apellidos;
 
         return $this;
     }
