@@ -18,6 +18,11 @@ class Client
     #[ORM\Column(length: 255)]
     private ?string $nombre = null;
     private ?string $apellidos = null;
+    private ?string $poblacion = null;
+    private ?string $categoria = null;
+    private ?string $edad = null;
+    private ?string $activo = null;
+    private ?string $createdAt = null;
 
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'clientes')]
 
@@ -57,6 +62,66 @@ class Client
         return $this;
     }
 
+    public function getPoblacion(): ?string
+    {
+        return $this->poblacion;
+    }
+
+    public function setPoblacion(string $poblacion): self
+    {
+        $this->poblacion = $poblacion;
+
+        return $this;
+    }
+
+    public function getCategoria(): ?string
+    {
+        return $this->categoria;
+    }
+
+    public function setCategoria(string $categoria): self
+    {
+        $this->categoria = $categoria;
+
+        return $this;
+    }
+
+    public function getEdad(): ?int
+    {
+        return $this->edad;
+    }
+
+    public function setEdad(int $edad): self
+    {
+        $this->edad = $edad;
+
+        return $this;
+    }
+
+    public function getActivo(): ?bool
+    {
+        return $this->activo;
+    }
+
+    public function setActivo(bool $activo): self
+    {
+        $this->activo = $activo;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, User>
      */
@@ -71,7 +136,6 @@ class Client
             $this->users->add($user);
 
             $user->addCliente($this);
-
         }
 
         return $this;
@@ -82,7 +146,6 @@ class Client
         if ($this->users->removeElement($user)) {
 
             $user->removeCliente($this);
-
         }
 
         return $this;
