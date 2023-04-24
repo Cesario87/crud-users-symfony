@@ -6,5 +6,15 @@ App\Entity\User:
       groups: ['user']
     apellidos:
       groups: ['user']
+    poblacion:
+      groups: ['user']
+    categoria:
+      groups: ['user']
+    edad:
+      groups: ['user']
+    activo:
+      groups: ['user']
+    createdAt:
+      groups: ['user']
     clientes:
       groups: ['user']

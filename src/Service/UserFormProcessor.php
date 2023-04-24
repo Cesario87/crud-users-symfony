@@ -16,7 +16,6 @@ class UserFormProcessor
 
     private $userManager;
     private $clientManager;
-    private $fileUploader;
     private $formFactory;
 
     public function __construct(
@@ -69,6 +68,10 @@ class UserFormProcessor
             }
             $user->setNombre($userDto->nombre);
             $user->setApellidos($userDto->apellidos);
+            $user->setPoblacion($userDto->poblacion);
+            $user->setCategoria($userDto->categoria);
+            $user->setEdad($userDto->edad);
+            $user->setActivo($userDto->activo);
             $this->userManager->save($user);
             $this->userManager->reload($user);
             return [$user, null];
