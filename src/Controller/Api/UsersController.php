@@ -24,10 +24,14 @@ class UsersController extends AbstractFOSRestController
         $clientId = $request->query->get('clientId');
         $page = $request->query->get('page');
         $itemsPerPage = $request->query->get('itemsPerPage');
+        $sortOrder = $request->query->get('sortOrder', 'ASC'); // Get sortOrder parameter from URL, default value is 'ASC' if not specified
+        $sortBy = $request->query->get('sortBy', 'id'); // Get sortBy parameter from URL, default value is 'id' if not specified
         $criteria = new UserRepositoryCriteria(
             $clientId,
             $itemsPerPage != null ? intval($itemsPerPage) : 10,
             $page != null ? intval($page) : 1,
+            $sortOrder,
+            $sortBy
         );
         return $userManager->getRepository()->findByCriteria($criteria);
     }

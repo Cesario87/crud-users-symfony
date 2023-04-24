@@ -43,7 +43,7 @@ class UserRepository extends ServiceEntityRepository
     public function findByCriteria(UserRepositoryCriteria $criteria): array
     {
         $queryBuilder = $this->createQueryBuilder('u')
-            ->orderBy('u.id', 'ASC');
+            ->orderBy('u.'.$criteria->sortBy, $criteria->sortOrder); // Order by the column specified in the sortBy parameter and the sorting direction specified in the sortOrder parameter
 
         if ($criteria->clientId != null) {
             $queryBuilder
