@@ -33,9 +33,9 @@ symfony server:start
 Shows all users
 ### /api/users/10
 Show user
-### /api/users?itemsPerPage=20&page=2&sortBy=id&sortOrder=ASC
-Shows page 2 with 20 items per page, sorted by id an ASC
-### /api/users?itemsPerPage=2&clientId=2
+### /api/users?itemsPerPage=5&page=2&sortBy=id&sortOrder=ASC
+Shows page 2 with 5 items per page, sorted by id an ASC
+### /api/users?itemsPerPage=2&clientIdValue=2
 Shows page 2 of clients associated to a client with id = 2
 ### /api/clients
 Shows all clients
