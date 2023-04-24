@@ -9,6 +9,10 @@ class UserDto
     public $nombre;
     public $apellidos;
     public $poblacion;
+    public $categoria;
+    public $edad;
+    public $activo;
+    public $createdAt;
     public $clientes;
 
     public function __construct()
