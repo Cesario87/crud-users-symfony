@@ -4,7 +4,8 @@ namespace App\Model\User;
 
 use DateTime;
 
-class UserRepositoryCriteria {
+class UserRepositoryCriteria
+{
     public function __construct(
         public readonly ?string $clientId = null,
         public readonly int $itemsPerPage = 10,
@@ -19,8 +20,9 @@ class UserRepositoryCriteria {
         public readonly ?int $edad = null,
         public readonly ?bool $activo  = null,
         public readonly ?DateTime $createdAt = null,
-        public ?bool $notEqual = false
-    )
-    {
+        public ?bool $notEqual = false,
+        public ?int $idGreaterThan = null,
+        public ?int $idLessThan = null,
+    ) {
     }
 }
