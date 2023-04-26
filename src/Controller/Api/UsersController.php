@@ -34,6 +34,7 @@ class UsersController extends AbstractFOSRestController
         $edad = $request->query->get('edad');
         $activo = $request->query->get('activo');
         $createdAt = $request->query->get('createdAt');
+        $notEqual = $request->query->get('notEqual');
         $criteria = new UserRepositoryCriteria(
             $clientId,
             $itemsPerPage != null ? intval($itemsPerPage) : 10,
@@ -47,7 +48,8 @@ class UsersController extends AbstractFOSRestController
             $categoria,
             $edad,
             $activo,
-            $createdAt
+            $createdAt,
+            $notEqual
         );
         return $userManager->getRepository()->findByCriteria($criteria);
     }

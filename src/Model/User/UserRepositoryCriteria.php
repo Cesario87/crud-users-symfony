@@ -18,9 +18,9 @@ class UserRepositoryCriteria {
         public readonly ?string $categoria  = null,
         public readonly ?int $edad = null,
         public readonly ?bool $activo  = null,
-        public readonly ?DateTime $createdAt = null
+        public readonly ?DateTime $createdAt = null,
+        public ?bool $notEqual = false
     )
     {
-        
     }
 }
