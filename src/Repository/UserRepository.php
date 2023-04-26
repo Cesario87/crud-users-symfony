@@ -41,19 +41,68 @@ class UserRepository extends ServiceEntityRepository
     }
 
     public function findByCriteria(UserRepositoryCriteria $criteria): array
-    {
-        $queryBuilder = $this->createQueryBuilder('u')
-            ->orderBy('u.'.$criteria->sortBy, $criteria->sortOrder); // Order by the column specified in the sortBy parameter and the sorting direction specified in the sortOrder parameter
+{
+    $queryBuilder = $this->createQueryBuilder('u')
+        ->orderBy('u.'.$criteria->sortBy, $criteria->sortOrder); // Order by the column specified in the sortBy parameter and the sorting direction specified in the sortOrder parameter
 
-        if ($criteria->clientId != null) {
-            $queryBuilder
-                ->andWhere(':clientId MEMBER OF u.clientes')
-                ->setParameter('clientId', $criteria->clientId);
-        }
-
-        $queryBuilder->setMaxResults($criteria->itemsPerPage);
-        $queryBuilder->setFirstResult(($criteria->page - 1) * $criteria->itemsPerPage);
-
-        return $queryBuilder->getQuery()->getResult();
+    if ($criteria->clientId != null) {
+        $queryBuilder
+            ->andWhere(':clientId MEMBER OF u.clientes')
+            ->setParameter('clientId', $criteria->clientId);
     }
+    
+    if ($criteria->id != null) {
+        $queryBuilder
+            ->andWhere('u.id = :id')
+            ->setParameter('id', $criteria->id);
+    }
+
+    if ($criteria->nombre != null) {
+        $queryBuilder
+            ->andWhere('u.nombre = :nombre')
+            ->setParameter('nombre', $criteria->nombre);
+    }
+
+    if ($criteria->apellidos != null) {
+        $queryBuilder
+            ->andWhere('u.apellidos = :apellidos')
+            ->setParameter('apellidos', $criteria->apellidos);
+    }
+
+    if ($criteria->poblacion != null) {
+        $queryBuilder
+            ->andWhere('u.poblacion = :poblacion')
+            ->setParameter('poblacion', $criteria->poblacion);
+    }
+
+    if ($criteria->categoria != null) {
+        $queryBuilder
+            ->andWhere('u.categoria = :categoria')
+            ->setParameter('categoria', $criteria->categoria);
+    }
+
+    if ($criteria->edad != null) {
+        $queryBuilder
+            ->andWhere('u.edad = :edad')
+            ->setParameter('edad', $criteria->edad);
+    }
+
+    if ($criteria->activo != null) {
+        $queryBuilder
+            ->andWhere('u.activo = :activo')
+            ->setParameter('activo', $criteria->activo);
+    }
+
+    if ($criteria->createdAt != null) {
+        $queryBuilder
+            ->andWhere('u.createdAt = :createdAt')
+            ->setParameter('createdAt', $criteria->createdAt);
+    }
+
+    $queryBuilder->setMaxResults($criteria->itemsPerPage);
+    $queryBuilder->setFirstResult(($criteria->page - 1) * $criteria->itemsPerPage);
+
+    return $queryBuilder->getQuery()->getResult();
+}
+
 }

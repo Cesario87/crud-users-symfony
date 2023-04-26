@@ -26,12 +26,28 @@ class UsersController extends AbstractFOSRestController
         $itemsPerPage = $request->query->get('itemsPerPage');
         $sortOrder = $request->query->get('sortOrder', 'ASC'); // Get sortOrder parameter from URL, default value is 'ASC' if not specified
         $sortBy = $request->query->get('sortBy', 'id'); // Get sortBy parameter from URL, default value is 'id' if not specified
+        $id = $request->query->get('id');
+        $nombre = $request->query->get('nombre');
+        $apellidos = $request->query->get('apellidos');
+        $poblacion = $request->query->get('poblacion');
+        $categoria = $request->query->get('categoria');
+        $edad = $request->query->get('edad');
+        $activo = $request->query->get('activo');
+        $createdAt = $request->query->get('createdAt');
         $criteria = new UserRepositoryCriteria(
             $clientId,
             $itemsPerPage != null ? intval($itemsPerPage) : 10,
             $page != null ? intval($page) : 1,
             $sortOrder,
-            $sortBy
+            $sortBy,
+            $id,
+            $nombre,
+            $apellidos,
+            $poblacion,
+            $categoria,
+            $edad,
+            $activo,
+            $createdAt
         );
         return $userManager->getRepository()->findByCriteria($criteria);
     }
