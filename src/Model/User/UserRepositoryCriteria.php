@@ -12,7 +12,7 @@ class UserRepositoryCriteria
         public readonly int $page = 1,
         public readonly string $sortOrder = 'ASC', // Add sortOrder parameter with default value 'ASC'
         public readonly string $sortBy = 'id', // Add sortBy parameter with default value 'id'
-        public readonly ?int $id = null,
+        public readonly ?array $id = null,
         public readonly ?string $nombre = null,
         public readonly ?string $apellidos = null,
         public readonly ?string $poblacion  = null,

@@ -63,9 +63,13 @@ class UserRepository extends ServiceEntityRepository
                 ->setParameter('clientId', $criteria->clientId);
         }
 
-        if ($criteria->id != null) {
+        if (is_array($criteria->id)) {
             $queryBuilder
-                ->andWhere('u.id ' . ($criteria->notEqual ? '<>' : '=') . ' :id')
+                ->andWhere('u.id IN (:ids)')
+                ->setParameter('ids', $criteria->id);
+        } elseif ($criteria->id !== null) {
+            $queryBuilder
+                ->andWhere('u.id = :id')
                 ->setParameter('id', $criteria->id);
         }
 
