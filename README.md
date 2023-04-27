@@ -39,8 +39,11 @@ Shows page 2 with 5 items per page, sorted by id an ASC
 Shows page 2 of clients associated to a client with id = 2
 ### /api/clients
 Shows all clients
-### /api/users?notEqual=true&id=43
-Shows 
+### /api/users?notEqual=true&id[]=43&id[]=45
+### /api/users?notEqual=true&nombre[]=Amador&nombre[]=Enrique
+Shows all users, excluding clients with such ids or names
+### /api/users?id__gt=43&id__lt=47
+Shows users with ids grater than 43 and lesser than 47
 
 ### POST
 ### /api/users
@@ -49,6 +52,7 @@ Creates a user
 Creates a client
 ### /api/users/{id}
 Modifies existing user
+
 ### DELETE
 ### /api/users/{id}
 Removes existing user

@@ -79,11 +79,21 @@ class UserRepository extends ServiceEntityRepository
                 ->setParameter('id', $criteria->id);
         };
 
-        if ($criteria->nombre != null) {
+        if (is_array($criteria->nombre)) {
+            if ($criteria->notEqual) {
+                $queryBuilder
+                    ->andWhere('u.nombre NOT IN (:nombre)')
+                    ->setParameter('nombre', $criteria->nombre);
+            } else {
+                $queryBuilder
+                    ->andWhere('u.nombre IN (:nombre)')
+                    ->setParameter('nombre', $criteria->nombre);
+            }
+        } elseif ($criteria->nombre !== null) {
             $queryBuilder
                 ->andWhere('u.nombre ' . ($criteria->notEqual ? '<>' : '=') . ' :nombre')
                 ->setParameter('nombre', $criteria->nombre);
-        }
+        };
 
         if ($criteria->apellidos != null) {
             $queryBuilder
