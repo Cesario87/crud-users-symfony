@@ -26,7 +26,7 @@ public function getAction(
     $itemsPerPage = $request->query->get('itemsPerPage');
     $sortOrder = $request->query->get('sortOrder', 'ASC'); // Get sortOrder parameter from URL, default value is 'ASC' if not specified
     $sortBy = $request->query->get('sortBy', 'id'); // Get sortBy parameter from URL, default value is 'id' if not specified
-    $id = $request->query->get('id', []);
+    $id = $request->query->get('id');
     $nombre = $request->query->get('nombre');
     $apellidos = $request->query->get('apellidos');
     $poblacion = $request->query->get('poblacion');
