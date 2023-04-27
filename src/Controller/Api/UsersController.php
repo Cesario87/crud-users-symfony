@@ -56,6 +56,7 @@ public function getAction(
         $idGreaterThan !== null ? intval($idGreaterThan) : null,
         $idLessThan,
     );
+    
     return $userManager->getRepository()->findByCriteria($criteria);
 }
 

@@ -39,6 +39,8 @@ Shows page 2 with 5 items per page, sorted by id an ASC
 Shows page 2 of clients associated to a client with id = 2
 ### /api/clients
 Shows all clients
+### /api/users?notEqual=true&id=43
+Shows 
 
 ### POST
 ### /api/users

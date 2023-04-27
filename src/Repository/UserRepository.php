@@ -64,9 +64,15 @@ class UserRepository extends ServiceEntityRepository
         }
 
         if (is_array($criteria->id)) {
-            $queryBuilder
-                ->andWhere('u.id IN (:id)')
-                ->setParameter('id', $criteria->id);
+            if ($criteria->notEqual) {
+                $queryBuilder
+                    ->andWhere('u.id NOT IN (:id)')
+                    ->setParameter('id', $criteria->id);
+            } else {
+                $queryBuilder
+                    ->andWhere('u.id IN (:id)')
+                    ->setParameter('id', $criteria->id);
+            }
         } elseif ($criteria->id !== null) {
             $queryBuilder
                 ->andWhere('u.id ' . ($criteria->notEqual ? '<>' : '=') . ' :id')

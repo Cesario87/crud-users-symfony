@@ -24,5 +24,6 @@ class UserRepositoryCriteria
         public ?int $idGreaterThan = null,
         public ?int $idLessThan = null,
     ) {
+        
     }
 }
